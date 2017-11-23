@@ -1,16 +1,11 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <todos :todos="todos"></todos>
-    <todo-form :todos="todos"></todo-form>
+    <router-view :todos="todos"></router-view>
   </div>
 </template>
 
 <script>
-
-import HelloWorld from './components/HelloWorld'
-import Todos from './components/Todos'
-import TodoForm from './components/TodoForm'
 
 export default {
 
@@ -25,8 +20,7 @@ export default {
       this.axios.get('http://vue-spa.dev/api/todos').then((response) => {
           this.todos = response.data;
           console.log(response.data)
-      });
-      this.todoCount();
+      })
   },
 
   methods:{
@@ -36,7 +30,7 @@ export default {
   },
 
   components: {
-    Todos,TodoForm
+
   }
 
 }
