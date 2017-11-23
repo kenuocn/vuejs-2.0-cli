@@ -43,8 +43,12 @@
             deleteTodo: function (index) {
                 this.todos.splice(index, 1)
             },
-            toggleCompletion(todo) {
-                todo.completed = !todo.completed;
+            toggleCompletion(todo)
+            {
+                this.axios.patch('http://vue-spa.dev/api/todos/'+todo.id,{completed:true}).then(response=>{
+                    console.log(response.data);
+                    todo.completed = !todo.completed;
+                });
             },
         },
 

@@ -25,7 +25,11 @@
 
         methods:{
           addTodo:function (newTodo) {
-            this.todos.push(newTodo);
+            this.axios.post('http://vue-spa.dev/api/todos',{title:this.newTodo.title}).then(response=>{
+                this.todos.push(response.data);
+                console.log(response.data);
+            });
+
             this.newTodo = {id:null,title:'',completed:false};
           }
         },
