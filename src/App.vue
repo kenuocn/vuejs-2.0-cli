@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <router-view :todos="todos"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -9,23 +9,14 @@
 
 export default {
 
-  data(){
-    return {
-        todos:[],
-    }
-  },
-
   mounted()
   {
-      this.axios.get('http://vue-spa.dev/api/todos').then((response) => {
-          this.todos = response.data;
-          console.log(response.data)
-      })
+      this.$store.dispatch('getTodos');
   },
 
-  methods:{
+  computed:{
       todoCount(){
-          return this.todos.length;
+          return this.$store.state.todos.length;
       }
   },
 

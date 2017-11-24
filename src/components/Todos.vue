@@ -1,25 +1,55 @@
 <template>
     <div id="todos">
-        <ul class="list-group" v-if="todos.length > 0">
+        <ul class="list-group" >
             <li class="list-group-item"
-                v-bind:class="{'completed' : todo.completed}"
-                v-for="(todo,index) in todos">
+                :class="todo.completed == '1' ? 'completed' : ''"
+                v-for="(todo, index) in todos">
 
                 <router-link :to="{ name:'todo', params:{id:todo.id}}">{{todo.title}}</router-link>
-
                 <button class="btn btn-xs pull-right"
-                        v-bind:class="[todo.completed ? 'btn-danger' : 'btn-success']"
+                        :class="'btn-' + (todo.completed == '1' ? 'danger' : 'success')"
                         v-on:click="toggleCompletion(todo)">
-                    {{ todo.completed ? 'undo' : 'completed'}}
+                    {{ todo.completed == '1' ? 'undo' : 'completed'}}
                 </button>
-                <button class="btn btn-warning btn-xs pull-right completed-right" v-on:click="deleteTodo(index)">
+                <button class="btn btn-warning btn-xs pull-right completed-right" @click="deleteTodo(todo,index)">
                     删除
                 </button>
             </li>
         </ul>
-        <todo-form :todos="todos"></todo-form>
+        <todo-form></todo-form>
     </div>
 </template>
+
+<script>
+    import TodoForm from './TodoForm'
+
+    export default {
+
+        name:'todos',
+
+        computed:{
+          todos(){
+              return this.$store.state.todos
+          }
+        },
+
+        methods: {
+            deleteTodo: function (todo,index)
+            {
+              this.$store.dispatch('removeTodo',{ todo, index });
+            },
+            toggleCompletion(todo) {
+                this.$store.dispatch('completeTodo',todo);
+            },
+        },
+
+        components: {
+            TodoForm
+        },
+
+    }
+</script>
+
 <style>
     .completed {
         color: chartreuse;
@@ -30,31 +60,3 @@
         margin-right: 10px;
     }
 </style>
-<script>
-    import TodoForm from './TodoForm'
-
-    export default {
-
-        name:'todos',
-
-        props: ['todos'],
-
-        methods: {
-            deleteTodo: function (index) {
-                this.todos.splice(index, 1)
-            },
-            toggleCompletion(todo)
-            {
-                this.axios.patch('http://vue-spa.dev/api/todos/'+todo.id,{completed:true}).then(response=>{
-                    console.log(response.data);
-                    todo.completed = !todo.completed;
-                });
-            },
-        },
-
-        components: {
-            TodoForm
-        }
-    }
-</script>
-

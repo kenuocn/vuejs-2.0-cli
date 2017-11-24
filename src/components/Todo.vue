@@ -38,7 +38,6 @@
                 this.error = this.post = null;
                 this.loading = true;
                 this.axios.get('http://vue-spa.dev/api/todos/'+this.$route.params.id).then(response => {
-                    console.log(response.data);
                     this.loading = false;
                     this.todo = response.data;
                 })
